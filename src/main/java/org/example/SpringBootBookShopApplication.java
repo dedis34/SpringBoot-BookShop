@@ -16,7 +16,6 @@ public class SpringBootBookShopApplication {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
-
             }
         };
     }
