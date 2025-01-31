@@ -11,6 +11,7 @@ public class SpringBootBookShopApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpringBootBookShopApplication.class, args);
     }
+
     @Bean
     public CommandLineRunner commandLineRunner() {
         return new CommandLineRunner() {
