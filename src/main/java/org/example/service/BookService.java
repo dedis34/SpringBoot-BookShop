@@ -5,7 +5,9 @@ import org.example.dto.CreateBookRequestDto;
 import java.util.List;
 
 public interface BookService {
-    BookDto create(CreateBookRequestDto createBookRequestDto);
-    List<BookDto> getAll();
-    BookDto getById(Long id);
+    BookDto save(CreateBookRequestDto createBookRequestDto);
+    List<BookDto> findAll();
+    BookDto findById(Long id);
+    void deleteById(Long id);
+    void updateBookById(Long id, BookDto bookDto);
 }
