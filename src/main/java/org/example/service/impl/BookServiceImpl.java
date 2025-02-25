@@ -2,15 +2,19 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dto.BookDto;
+import org.example.dto.BookSearchParametersDto;
 import org.example.dto.CreateBookRequestDto;
 import org.example.exception.BookNotFoundException;
 import org.example.exception.BookSaveException;
 import org.example.exception.BookValidationException;
 import org.example.mapper.BookMapper;
 import org.example.model.Book;
-import org.example.repository.BookRepository;
+import org.example.repository.book.BookRepository;
+import org.example.repository.book.BookSpecificationBuilder;
 import org.example.service.BookService;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -18,6 +22,7 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final BookSpecificationBuilder bookSpecificationBuilder;
 
     @Override
     public BookDto save(CreateBookRequestDto createBookRequestDto) {
@@ -52,7 +57,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteById(Long id) {
-        bookRepository.deleteById(id);
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException("Book with id: " + id + " not found"));
+        book.setDeleted(true);
+        bookRepository.save(book);
     }
 
     @Override
@@ -64,5 +72,14 @@ public class BookServiceImpl implements BookService {
                 bookDto.getAuthor(), bookDto.getIsbn(),
                 bookDto.getPrice(), bookDto.getDescription(),
                 bookDto.getCoverImage());
+    }
+
+    @Override
+    public List<BookDto> search(BookSearchParametersDto params) {
+        Specification<Book> bookSpecification = bookSpecificationBuilder.build(params);
+        return bookRepository.findAll(bookSpecification)
+                .stream()
+                .map(bookMapper::toDto)
+                .toList();
     }
 }
