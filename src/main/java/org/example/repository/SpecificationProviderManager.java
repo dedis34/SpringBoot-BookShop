@@ -1,5 +1,5 @@
 package org.example.repository;
 
 public interface SpecificationProviderManager <T> {
-    SpecificationProvider<T> getSpecificationProvider(String key);
+    SpecificationSelector<T> getSpecificationProvider(String key);
 }
