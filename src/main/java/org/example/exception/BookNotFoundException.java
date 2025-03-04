@@ -6,6 +6,6 @@ public class BookNotFoundException extends RuntimeException {
   }
 
   public BookNotFoundException() {
-    super();
+    super("Can't find Book entity");
   }
 }

@@ -20,4 +20,6 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
             + " b.coverImage = :coverImage WHERE b.id = :id AND b.isDeleted = false")
     void updateBookById(Long id, String title, String author, String isbn,
                        BigDecimal price, String description, String coverImage);
+
+    boolean existsByIsbn(String isbn);
 }

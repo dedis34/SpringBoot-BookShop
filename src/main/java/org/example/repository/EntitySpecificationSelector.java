@@ -4,7 +4,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Map;
 
-public interface SpecificationSelector <T> {
+public interface EntitySpecificationSelector <T> {
     String getKey();
     Specification<T> getSpecification(Map<String, Object> params);
 }
