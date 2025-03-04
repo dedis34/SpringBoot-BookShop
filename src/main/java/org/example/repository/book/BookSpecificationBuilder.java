@@ -7,6 +7,9 @@ import org.example.repository.SpecificationBuilder;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RequiredArgsConstructor
 @Component
 public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
@@ -15,21 +18,27 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
 
     @Override
     public Specification<Book> build(BookSearchParametersDto searchParameters) {
-        Specification<Book> spec = Specification.where(null);
+        Map<String, Object> params = new HashMap<>();
+
         if (searchParameters.getAuthor() != null && searchParameters.getAuthor().length > 0) {
-            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider("author")
-                    .getSpecification(searchParameters.getAuthor()));
+            params.put("author", searchParameters.getAuthor());
         }
 
         if (searchParameters.getIsbn() != null && searchParameters.getIsbn().length > 0) {
-                spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider("isbn")
-                        .getSpecification(searchParameters.getIsbn()));
+            params.put("isbn", searchParameters.getIsbn());
         }
 
         if (searchParameters.getTitle() != null && searchParameters.getTitle().length > 0) {
-                spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider("title")
-                        .getSpecification(searchParameters.getTitle()));
+            params.put("title", searchParameters.getTitle());
         }
+
+        Specification<Book> spec = Specification.where(null);
+
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider(entry.getKey())
+                    .getSpecification(params));
+        }
+
         return spec;
     }
 }

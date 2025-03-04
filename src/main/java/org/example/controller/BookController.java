@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.BookDto;
 import org.example.dto.BookSearchParametersDto;
@@ -27,7 +28,8 @@ public class BookController {
     }
 
     @PostMapping
-    public BookDto createBook(@RequestBody CreateBookRequestDto createBookRequestDto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto createBookRequestDto) {
         return bookService.save(createBookRequestDto);
     }
 
