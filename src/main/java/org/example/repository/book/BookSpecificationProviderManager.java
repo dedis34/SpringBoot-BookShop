@@ -2,7 +2,7 @@ package org.example.repository.book;
 
 import lombok.RequiredArgsConstructor;
 import org.example.exception.EntitySpecificationProviderException;
-import org.example.repository.SpecificationSelector;
+import org.example.repository.EntitySpecificationSelector;
 import org.example.repository.SpecificationProviderManager;
 import org.springframework.stereotype.Component;
 
@@ -12,10 +12,10 @@ import java.util.List;
 @Component
 public class BookSpecificationProviderManager<Book> implements SpecificationProviderManager<Book> {
 
-    private final List<SpecificationSelector<Book>> specificationProviders;
+    private final List<EntitySpecificationSelector<Book>> specificationProviders;
 
     @Override
-    public SpecificationSelector<Book> getSpecificationProvider(String key) {
+    public EntitySpecificationSelector<Book> getSpecificationProvider(String key) {
         return specificationProviders.stream()
                 .filter(p -> p.getKey().equals(key))
                 .findFirst()
