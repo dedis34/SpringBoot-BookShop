@@ -2,6 +2,7 @@ package org.example.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.BookDto;
@@ -33,7 +34,7 @@ public class BookController {
 
     @Operation(summary = "Get all books", description = "Get a list of all books")
     @GetMapping
-    public List<BookDto> getAll(Pageable pageable) {
+    public List<BookDto> getAll(@Parameter(hidden = true) Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
@@ -60,14 +61,13 @@ public class BookController {
     @Operation(summary = "Update book by ID",
             description = "Update the details of an existing book by its ID")
     @PutMapping("/{id}")
-    public void updateBookById(@PathVariable Long id, @RequestBody BookDto bookDto) {
+    public void updateBookById(@PathVariable Long id, @Valid @RequestBody BookDto bookDto) {
         bookService.updateBookById(id, bookDto);
     }
 
-    @Operation(summary = "Search books", description = "Search books by various parameters")
+    @Operation(summary = "Search books", description = "Search books by various parameters with pagination")
     @GetMapping("/search")
-    public List<BookDto> searchBooks(BookSearchParametersDto searchParameters) {
-        return bookService.search(searchParameters);
+    public List<BookDto> searchBooks(@RequestBody BookSearchParametersDto searchParameters, Pageable pageable) {
+        return bookService.search(searchParameters, pageable);
     }
-
 }

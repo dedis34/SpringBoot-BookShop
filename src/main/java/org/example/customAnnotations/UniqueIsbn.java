@@ -1,7 +1,8 @@
-package org.example.validator;
+package org.example.customAnnotations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+import org.example.customAnnotations.validators.UniqueIsbnValidator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
