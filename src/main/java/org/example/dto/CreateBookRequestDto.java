@@ -4,7 +4,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.example.validator.UniqueIsbn;
+import org.example.customAnnotations.UniqueIsbn;
 
 import java.math.BigDecimal;
 
