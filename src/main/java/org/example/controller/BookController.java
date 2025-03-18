@@ -30,19 +30,18 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/books")
 public class BookController {
-
     private final BookService bookService;
 
     @Operation(summary = "Get all books", description = "Get a list of all books")
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<BookDto> getAll(@Parameter(hidden = true) Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
     @Operation(summary = "Get book by ID", description = "Get a book by its ID")
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public BookDto getBookById(@PathVariable Long id) {
         return bookService.findById(id);
     }
@@ -73,7 +72,7 @@ public class BookController {
 
     @Operation(summary = "Search books", description = "Search books by various parameters with pagination")
     @GetMapping("/search")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<BookDto> searchBooks(@RequestBody BookSearchParametersDto searchParameters, Pageable pageable) {
         return bookService.search(searchParameters, pageable);
     }

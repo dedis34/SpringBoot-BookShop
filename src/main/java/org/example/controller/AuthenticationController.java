@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/api/auth")
 public class AuthenticationController {
-
     private final UserService userService;
 
     @Operation(summary = "Register a new user", description = "Register a new user")

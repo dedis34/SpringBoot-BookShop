@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.math.BigDecimal;
 
 public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
-
     @Modifying
     @Query("UPDATE Book b SET "
             + " b.title = :title,"

@@ -11,7 +11,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Component
 public class BookSpecificationProviderManager<Book> implements SpecificationProviderManager<Book> {
-
     private final List<EntitySpecificationSelector<Book>> specificationProviders;
 
     @Override

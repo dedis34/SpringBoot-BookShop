@@ -15,7 +15,7 @@ public interface UserMapper {
     UserResponseDto toDto(User user);
     User toModel(UserRegistrationRequestDto userRegistrationRequestDto);
 
-    default Set<String> map(Set<Role> roles) {
+    default Set<String> mapRolesToRoleNames(Set<Role> roles) {
         Set<String> roleNames = new HashSet<>();
         for (Role role : roles) {
             roleNames.add(role.getName().name());

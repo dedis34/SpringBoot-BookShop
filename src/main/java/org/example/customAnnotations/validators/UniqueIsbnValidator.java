@@ -7,7 +7,6 @@ import org.example.customAnnotations.UniqueIsbn;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class UniqueIsbnValidator implements ConstraintValidator<UniqueIsbn, String> {
-
     @Autowired
     private BookRepository bookRepository;
 

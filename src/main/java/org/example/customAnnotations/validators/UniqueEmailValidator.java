@@ -7,7 +7,6 @@ import org.example.customAnnotations.UniqueIsbn;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class UniqueEmailValidator implements ConstraintValidator<UniqueIsbn, String> {
-
     @Autowired
     private UserRepository userRepository;
 
