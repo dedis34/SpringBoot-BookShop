@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: "src/main/resources/db/changelog/changes/001-insert-users.yaml"
+  - include:
+      file: "src/main/resources/db/changelog/changes/002-insert-roles.yaml"
+  - include:
+      file: "src/main/resources/db/changelog/changes/003-create-users-roles-table.yaml"
+  - include:
+      file: "src/main/resources/db/changelog/changes/004-assign-roles.yaml"

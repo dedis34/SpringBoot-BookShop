@@ -8,6 +8,7 @@ import org.example.model.User;
 import org.example.repository.user.UserRepository;
 import org.example.service.UserService;
 import org.example.mapper.UserMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +17,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto userRegistrationRequestDto) {
@@ -24,6 +26,9 @@ public class UserServiceImpl implements UserService {
         }
 
         User newUser = userMapper.toModel(userRegistrationRequestDto);
+
+        String encodedPassword = passwordEncoder.encode(userRegistrationRequestDto.getPassword());
+        newUser.setPassword(encodedPassword);
 
         userRepository.save(newUser);
 
