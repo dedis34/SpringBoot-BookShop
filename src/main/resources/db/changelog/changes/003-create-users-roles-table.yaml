@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: "003-create-users-roles-table"
+      author: "artur"
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: "users_roles"
+        - tableExists:
+            tableName: "roles"
+      changes:
+        - createTable:
+            tableName: "users_roles"
+            columns:
+              - column:
+                  name: "user_id"
+                  type: "BIGINT"
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_users_roles_user"
+                    referencedTableName: "users"
+                    referencedColumnNames: "id"
+              - column:
+                  name: "role_id"
+                  type: "BIGINT"
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_users_roles_role"
+                    referencedTableName: "roles"
+                    referencedColumnNames: "id"
+        - addPrimaryKey:
+            tableName: "users_roles"
+            columnNames: "user_id, role_id"
+            constraintName: "pk_users_roles"

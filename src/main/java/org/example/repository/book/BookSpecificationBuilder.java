@@ -13,7 +13,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Component
 public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
-
     private final BookSpecificationProviderManager<Book> bookSpecificationProviderManager;
 
     @Override

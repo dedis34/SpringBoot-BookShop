@@ -6,7 +6,6 @@ import org.example.dto.UserRegistrationRequestDto;
 import org.example.customAnnotations.FieldMatch;
 
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, UserRegistrationRequestDto> {
-
     private String field;
     private String fieldMatch;
 

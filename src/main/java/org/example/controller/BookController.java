@@ -12,6 +12,7 @@ import org.example.service.BookService;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,31 +30,34 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/books")
 public class BookController {
-
     private final BookService bookService;
 
     @Operation(summary = "Get all books", description = "Get a list of all books")
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<BookDto> getAll(@Parameter(hidden = true) Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
     @Operation(summary = "Get book by ID", description = "Get a book by its ID")
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public BookDto getBookById(@PathVariable Long id) {
         return bookService.findById(id);
     }
 
     @Operation(summary = "Create a new Book", description = "Create a new Book")
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto createBookRequestDto) {
         return bookService.save(createBookRequestDto);
     }
 
     @Operation(summary = "Delete book by ID", description = "Delete a book by its ID")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBookById(@PathVariable Long id) {
         bookService.deleteById(id);
     }
@@ -61,12 +65,14 @@ public class BookController {
     @Operation(summary = "Update book by ID",
             description = "Update the details of an existing book by its ID")
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void updateBookById(@PathVariable Long id, @Valid @RequestBody BookDto bookDto) {
         bookService.updateBookById(id, bookDto);
     }
 
     @Operation(summary = "Search books", description = "Search books by various parameters with pagination")
     @GetMapping("/search")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<BookDto> searchBooks(@RequestBody BookSearchParametersDto searchParameters, Pageable pageable) {
         return bookService.search(searchParameters, pageable);
     }

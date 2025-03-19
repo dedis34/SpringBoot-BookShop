@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: "002-insert-roles"
+      author: "artur"
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: "roles"
+      changes:
+        - insert:
+            tableName: "roles"
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "1"
+              - column:
+                  name: "name"
+                  value: "ROLE_ADMIN"
+        - insert:
+            tableName: "roles"
+            columns:
+              - column:
+                  name: "id"
+                  valueNumeric: "2"
+              - column:
+                  name: "name"
+                  value: "ROLE_USER"

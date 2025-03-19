@@ -1,6 +1,7 @@
 package org.example.dto;
 
 import lombok.Data;
+import java.util.Set;
 
 @Data
 public class UserResponseDto {
@@ -9,4 +10,5 @@ public class UserResponseDto {
     private String firstName;
     private String lastName;
     private String shippingAddress;
+    private Set<String> roles;
 }
