@@ -5,9 +5,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.dto.BookDto;
-import org.example.dto.BookSearchParametersDto;
-import org.example.dto.CreateBookRequestDto;
+import org.example.dto.book.BookDto;
+import org.example.dto.book.BookSearchParametersDto;
+import org.example.dto.book.CreateBookRequestDto;
 import org.example.service.BookService;
 import org.springframework.http.HttpStatus;
 

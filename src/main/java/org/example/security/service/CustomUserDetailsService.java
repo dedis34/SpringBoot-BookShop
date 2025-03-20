@@ -1,7 +1,7 @@
-package org.example.security;
+package org.example.security.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
-public interface CustomUserDetailService {
+public interface CustomUserDetailsService {
     UserDetails loadUserByUsername(String email);
 }

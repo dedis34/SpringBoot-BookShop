@@ -1,7 +1,7 @@
 package org.example.service;
 
-import org.example.dto.UserRegistrationRequestDto;
-import org.example.dto.UserResponseDto;
+import org.example.dto.user.UserRegistrationRequestDto;
+import org.example.dto.user.UserResponseDto;
 
 public interface UserService {
     UserResponseDto register(UserRegistrationRequestDto userRegistrationRequestDto);

@@ -2,7 +2,7 @@ package org.example.customAnnotations.validators;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.example.dto.UserRegistrationRequestDto;
+import org.example.dto.user.UserRegistrationRequestDto;
 import org.example.customAnnotations.FieldMatch;
 
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, UserRegistrationRequestDto> {

@@ -4,9 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.dto.UserRegistrationRequestDto;
-import org.example.dto.UserResponseDto;
-import org.example.exception.RegistrationException;
+import org.example.dto.user.UserLoginRequestDto;
+import org.example.dto.user.UserLoginResponseDto;
+import org.example.dto.user.UserRegistrationRequestDto;
+import org.example.dto.user.UserResponseDto;
+import org.example.security.service.AuthenticationService;
 import org.example.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +19,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/auth")
 public class AuthenticationController {
     private final UserService userService;
+    private final AuthenticationService authenticationService;
 
     @Operation(summary = "Register a new user", description = "Register a new user")
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto request)
-            throws RegistrationException {
+    public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto request) {
         return userService.register(request);
+    }
+
+    @Operation(summary = "log user to the app", description = "logging user to the app")
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto requestDto) {
+        return authenticationService.authenticate(requestDto);
     }
 }

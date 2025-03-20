@@ -1,9 +1,9 @@
 package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.dto.BookDto;
-import org.example.dto.BookSearchParametersDto;
-import org.example.dto.CreateBookRequestDto;
+import org.example.dto.book.BookDto;
+import org.example.dto.book.BookSearchParametersDto;
+import org.example.dto.book.CreateBookRequestDto;
 import org.example.exception.BookNotFoundException;
 import org.example.exception.BookSaveException;
 import org.example.exception.BookValidationException;
