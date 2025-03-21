@@ -1,7 +1,7 @@
 package org.example.repository.book;
 
 import lombok.RequiredArgsConstructor;
-import org.example.dto.BookSearchParametersDto;
+import org.example.dto.book.BookSearchParametersDto;
 import org.example.model.Book;
 import org.example.repository.SpecificationBuilder;
 import org.springframework.data.jpa.domain.Specification;

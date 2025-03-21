@@ -1,8 +1,8 @@
 package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.dto.UserRegistrationRequestDto;
-import org.example.dto.UserResponseDto;
+import org.example.dto.user.UserRegistrationRequestDto;
+import org.example.dto.user.UserResponseDto;
 import org.example.exception.RegistrationException;
 import org.example.model.User;
 import org.example.repository.user.UserRepository;
