@@ -1,27 +1,27 @@
 databaseChangeLog:
   - changeSet:
-      id: "004-assign-roles"
-      author: "artur"
+      id: 004-assign-roles
+      author: artur
       preConditions:
         - onFail: MARK_RAN
         - tableExists:
-            tableName: "users_roles"
+            tableName: users_roles
       changes:
         - insert:
-            tableName: "users_roles"
+            tableName: users_roles
             columns:
               - column:
-                  name: "user_id"
+                  name: user_id
                   valueNumeric: "1"
               - column:
-                  name: "role_id"
+                  name: role_id
                   valueNumeric: "1"
         - insert:
-            tableName: "users_roles"
+            tableName: users_roles
             columns:
               - column:
-                  name: "user_id"
+                  name: user_id
                   valueNumeric: "2"
               - column:
-                  name: "role_id"
+                  name: role_id
                   valueNumeric: "2"

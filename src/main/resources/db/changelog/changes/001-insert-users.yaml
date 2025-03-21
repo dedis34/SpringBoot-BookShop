@@ -1,27 +1,27 @@
 databaseChangeLog:
   - changeSet:
-      id: "001-insert-users"
-      author: "artur"
+      id: 001-insert-users
+      author: artur
       preConditions:
         - onFail: MARK_RAN
         - tableExists:
-            tableName: "users"
+            tableName: users
       changes:
         - insert:
-            tableName: "users"
+            tableName: users
             columns:
               - column:
-                  name: "id"
+                  name: id
                   valueNumeric: "1"
               - column:
-                  name: "email"
-                  value: "admin@example.com"
+                  name: email
+                  value: admin@example.com
               - column:
-                  name: "password"
-                  value: "$2a$10$XyZ3wQ9E1PJKL6VjFdfSseCEq9rOvhA/UNmV94QHqkG2l6bBZyV6G"
+                  name: password
+                  value: $2a$10$XyZ3wQ9E1PJKL6VjFdfSseCEq9rOvhA/UNmV94QHqkG2l6bBZyV6G
               - column:
-                  name: "first_name"
-                  value: "Alice"
+                  name: first_name
+                  value: Alice
               - column:
-                  name: "last_name"
-                  value: "Stone"
+                  name: last_name
+                  value: Stone
