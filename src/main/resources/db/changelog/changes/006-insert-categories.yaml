@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-insert-categories
+      author: artur
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: "Fiction"
+              - column:
+                  name: description
+                  value: "Fiction books"
+              - column:
+                  name: is_deleted
+                  value: "false"

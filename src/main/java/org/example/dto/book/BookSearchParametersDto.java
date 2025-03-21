@@ -2,9 +2,11 @@ package org.example.dto.book;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class BookSearchParametersDto {
-    private String[] title;
-    private String[] author;
-    private String[] isbn;
+    private List<String> title;
+    private List<String> author;
+    private List<String> isbn;
 }

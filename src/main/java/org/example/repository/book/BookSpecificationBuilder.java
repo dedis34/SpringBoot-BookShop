@@ -19,15 +19,15 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
     public Specification<Book> build(BookSearchParametersDto searchParameters) {
         Map<String, Object> params = new HashMap<>();
 
-        if (searchParameters.getAuthor() != null && searchParameters.getAuthor().length > 0) {
+        if (searchParameters.getAuthor() != null && !searchParameters.getAuthor().isEmpty()) { // Użyj .isEmpty() dla List
             params.put("author", searchParameters.getAuthor());
         }
 
-        if (searchParameters.getIsbn() != null && searchParameters.getIsbn().length > 0) {
+        if (searchParameters.getIsbn() != null && !searchParameters.getIsbn().isEmpty()) {
             params.put("isbn", searchParameters.getIsbn());
         }
 
-        if (searchParameters.getTitle() != null && searchParameters.getTitle().length > 0) {
+        if (searchParameters.getTitle() != null && !searchParameters.getTitle().isEmpty()) {
             params.put("title", searchParameters.getTitle());
         }
 
@@ -40,4 +40,5 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
 
         return spec;
     }
+
 }
