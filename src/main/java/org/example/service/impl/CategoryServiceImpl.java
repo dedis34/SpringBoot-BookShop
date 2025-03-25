@@ -78,7 +78,4 @@ public class CategoryServiceImpl implements CategoryService {
                 .map(bookMapper::toDtoWithoutCategories)
                 .collect(Collectors.toList());
     }
-
-
-
 }

@@ -28,7 +28,7 @@ public class Book {
     private BigDecimal price;
     private String description;
     private String coverImage;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean isDeleted = false;
     @ManyToMany
     @JoinTable(

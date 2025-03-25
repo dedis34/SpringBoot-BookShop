@@ -28,6 +28,6 @@ public class Category {
     private String description;
     @ManyToMany(mappedBy = "categories")
     private Set<Book> books = new HashSet<>();
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean isDeleted = false;
 }

@@ -8,6 +8,6 @@ databaseChangeLog:
   - include:
       file: db/changelog/changes/004-assign-roles.yaml
   - include:
-      file: db/changelog/changes/005-create-categories-table
+      file: db/changelog/changes/005-create-categories-table.yaml
   - include:
       file: db/changelog/changes/006-insert-categories.yaml
