@@ -7,6 +7,8 @@ import lombok.Data;
 import org.example.customAnnotations.UniqueIsbn;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 public class CreateBookRequestDto {
@@ -25,4 +27,5 @@ public class CreateBookRequestDto {
     private BigDecimal price;
     private String description;
     private String coverImage;
+    private Set<Long> categoryIds = new HashSet<>();
 }

@@ -32,20 +32,6 @@ import java.util.List;
 public class BookController {
     private final BookService bookService;
 
-    @Operation(summary = "Get all books", description = "Get a list of all books")
-    @GetMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public List<BookDto> getAll(@Parameter(hidden = true) Pageable pageable) {
-        return bookService.findAll(pageable);
-    }
-
-    @Operation(summary = "Get book by ID", description = "Get a book by its ID")
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public BookDto getBookById(@PathVariable Long id) {
-        return bookService.findById(id);
-    }
-
     @Operation(summary = "Create a new Book", description = "Create a new Book")
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -68,6 +54,20 @@ public class BookController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void updateBookById(@PathVariable Long id, @Valid @RequestBody BookDto bookDto) {
         bookService.updateBookById(id, bookDto);
+    }
+
+    @Operation(summary = "Get all books", description = "Get a list of all books")
+    @GetMapping
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public List<BookDto> getAll(@Parameter(hidden = true) Pageable pageable) {
+        return bookService.findAll(pageable);
+    }
+
+    @Operation(summary = "Get book by ID", description = "Get a book by its ID")
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public BookDto getBookById(@PathVariable Long id) {
+        return bookService.findById(id);
     }
 
     @Operation(summary = "Search books", description = "Search books by various parameters with pagination")
