@@ -2,8 +2,8 @@ package org.example.repository.book;
 
 import lombok.RequiredArgsConstructor;
 import org.example.exception.EntitySpecificationProviderException;
-import org.example.repository.EntitySpecificationSelector;
-import org.example.repository.SpecificationProviderManager;
+import org.example.repository.spec.EntitySpecificationSelector;
+import org.example.repository.spec.SpecificationProviderManager;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

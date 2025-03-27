@@ -52,11 +52,13 @@
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
+            <version>8.2.0</version>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- Hibernate Core (JPA Implementation) -->
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>6.2.7.Final</version>
         </dependency>
@@ -155,10 +157,10 @@
                 <version>4.23.0</version>
                 <executions>
                     <execution>
-                        <phase>none</phase>
+                        <phase>process-resources</phase>
                         <configuration>
-                            <propertyFile>src/main/resources/liquibase.properties</propertyFile>
                             <changeLogFile>src/main/resources/db/changelog/db.changelog-master.yaml</changeLogFile>
+                            <propertyFile>src/main/resources/liquibase.properties</propertyFile>
                         </configuration>
                         <goals>
                             <goal>update</goal>

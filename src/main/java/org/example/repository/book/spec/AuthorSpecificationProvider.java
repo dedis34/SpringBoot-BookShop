@@ -1,7 +1,7 @@
 package org.example.repository.book.spec;
 
 import org.example.model.Book;
-import org.example.repository.EntitySpecificationSelector;
+import org.example.repository.spec.EntitySpecificationSelector;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
