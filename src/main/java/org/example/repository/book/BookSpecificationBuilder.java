@@ -3,7 +3,7 @@ package org.example.repository.book;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.book.BookSearchParametersDto;
 import org.example.model.Book;
-import org.example.repository.SpecificationBuilder;
+import org.example.repository.spec.SpecificationBuilder;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
