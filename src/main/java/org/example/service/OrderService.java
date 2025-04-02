@@ -3,12 +3,13 @@ package org.example.service;
 import org.example.dto.order.OrderRequestDto;
 import org.example.dto.order.OrderResponseDto;
 import org.example.dto.orderItem.OrderItemResponseDto;
-import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 
 public interface OrderService {
-    OrderResponseDto placeOrder(Long userId, OrderRequestDto orderRequestDto);
-    List<OrderResponseDto> getOrderHistory(Long userId);
+    OrderResponseDto createOrder(Long userId, OrderRequestDto orderRequestDto);
+    Page<OrderResponseDto> getOrderHistory(Long userId, Pageable pageable);
     void updateOrderStatus(Long orderId, String newStatus);
-    List<OrderItemResponseDto> getOrderItems(Long userId, Long orderId);
+    Page<OrderItemResponseDto> getOrderItems(Long userId, Long orderId, Pageable pageable);
     OrderItemResponseDto getOrderItem(Long userId, Long orderId, Long itemId);
 }
