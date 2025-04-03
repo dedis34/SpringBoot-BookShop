@@ -7,6 +7,7 @@ import org.example.model.CartItem;
 import org.example.model.ShoppingCart;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,17 +16,28 @@ import java.util.stream.Collectors;
 public interface ShoppingCartMapper {
 
     @Mapping(source = "user.id", target = "userId")
-    @Mapping(target = "cartItems", expression = "java(mapCartItems(shoppingCart.getCartItems()))")
+    @Mapping(target = "cartItems", qualifiedByName = "mapCartItems")
     ShoppingCartResponseDto toResponseDto(ShoppingCart shoppingCart);
 
+    @Named("mapCartItems")
     default Set<CartItemResponseDto> mapCartItems(Set<CartItem> cartItems) {
+        if (cartItems == null) {
+            return Set.of();
+        }
         return cartItems.stream()
-                .map(cartItem -> new CartItemResponseDto(
-                        cartItem.getId(),
-                        cartItem.getBook().getId(),
-                        cartItem.getBook().getTitle(),
-                        cartItem.getQuantity()
-                ))
+                .map(this::mapCartItem)
                 .collect(Collectors.toSet());
+    }
+
+    default CartItemResponseDto mapCartItem(CartItem cartItem) {
+        if (cartItem == null || cartItem.getBook() == null) {
+            return null;
+        }
+        return CartItemResponseDto.builder()
+                .id(cartItem.getId())
+                .bookId(cartItem.getBook().getId())
+                .bookTitle(cartItem.getBook().getTitle())
+                .quantity(cartItem.getQuantity())
+                .build();
     }
 }
