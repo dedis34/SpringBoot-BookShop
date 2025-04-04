@@ -37,10 +37,10 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderResponseDto createOrder(Long userId, OrderRequestDto orderRequestDto) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
 
         ShoppingCart shoppingCart = shoppingCartRepository.findByUser(user)
-                .orElseThrow(() -> new ShoppingCartNotFoundException("Shopping cart not found"));
+                .orElseThrow(() -> new ShoppingCartNotFoundException("Shopping cart not found for user ID: " + userId));
 
         Set<CartItem> cartItems = shoppingCart.getCartItems();
         if (cartItems.isEmpty()) {
