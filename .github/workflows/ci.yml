@@ -14,15 +14,8 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '21'
-          distribution: 'adoptopenjdk'
-
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          distribution: 'adopt'
+          cache: maven
 
       - name: Build and test with Maven using 'test' profile
         run: mvn --batch-mode --update-snapshots verify -Dspring.profiles.active=test -P!with-liquibase
