@@ -1,5 +1,6 @@
 package org.example.repository.book;
 
+import jakarta.transaction.Transactional;
 import org.example.model.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +14,8 @@ import java.math.BigDecimal;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
-    @Modifying
+    @Modifying(clearAutomatically = true)
+    @Transactional
     @Query("UPDATE Book b SET "
             + " b.title = :title,"
             + " b.author = :author,"

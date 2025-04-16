@@ -1,94 +1,111 @@
 package org.example.repository;
 
+import org.example.config.CustomMySqlContainer;
 import org.example.model.Book;
 import org.example.repository.book.BookRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.data.domain.Pageable;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-class BookRepositoryTest {
+@ExtendWith(SpringExtension.class)
+@DataJpaTest
+@Transactional
+public class BookRepositoryTest {
 
-    @Mock
+    @Autowired
     private BookRepository bookRepository;
 
-    private Book book;
+    @Autowired
+    private EntityManager entityManager;
+
+    private Long bookId;
 
     @BeforeEach
     void setUp() {
-        book = new Book();
-        book.setId(1L);
-        book.setTitle("Test Book");
-        book.setAuthor("Test Author");
-        book.setIsbn("1234567890");
+        CustomMySqlContainer.getInstance().start();
+
+        Book book = new Book();
+        book.setTitle("Sample Title");
+        book.setAuthor("Sample Author");
+        book.setIsbn("123456789");
         book.setPrice(BigDecimal.valueOf(19.99));
-        book.setDescription("Test Description");
-        book.setCoverImage("test.jpg");
+        book.setDescription("Sample Description");
+        book.setCoverImage("sampleImage.png");
+        book.setDeleted(false);
+        System.out.println("SetUp -> isDeleted: " + book.isDeleted());
+
+        book = bookRepository.save(book);
+        bookId = book.getId();
     }
 
     @Test
-    void findById_WhenBookExists_ShouldReturnBook() {
-        when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
+    void testUpdateBookById() {
+        Optional<Book> originalBook = bookRepository.findById(bookId);
+        Assertions.assertTrue(originalBook.isPresent());
+        System.out.println("Before update -> isDeleted: " + originalBook.get().isDeleted());
 
-        Optional<Book> result = bookRepository.findById(1L);
+        String updatedTitle = "Updated Title";
+        String updatedAuthor = "Updated Author";
+        String updatedIsbn = "987654321";
+        BigDecimal updatedPrice = BigDecimal.valueOf(29.99);
+        String updatedDescription = "Updated Description";
+        String updatedCoverImage = "updatedImage.png";
 
-        assertTrue(result.isPresent());
-        assertEquals("Test Book", result.get().getTitle());
+        System.out.println("Calling updateBookById with:");
+        System.out.println(" - id: " + bookId);
+        System.out.println(" - title: " + updatedTitle);
+        System.out.println(" - author: " + updatedAuthor);
+        System.out.println(" - isbn: " + updatedIsbn);
+        System.out.println(" - price: " + updatedPrice);
+        System.out.println(" - description: " + updatedDescription);
+        System.out.println(" - coverImage: " + updatedCoverImage);
+
+        bookRepository.updateBookById(
+                bookId,
+                updatedTitle,
+                updatedAuthor,
+                updatedIsbn,
+                updatedPrice,
+                updatedDescription,
+                updatedCoverImage
+        );
+
+        entityManager.flush();
+        entityManager.clear();
+
+        Optional<Book> updatedBook = bookRepository.findById(bookId);
+        Assertions.assertTrue(updatedBook.isPresent());
+
+        Book book = updatedBook.get();
+
+        System.out.println("After update -> title: " + book.getTitle());
+
+        Assertions.assertEquals(updatedTitle, book.getTitle());
+        Assertions.assertEquals(updatedAuthor, book.getAuthor());
+        Assertions.assertEquals(updatedIsbn, book.getIsbn());
+        Assertions.assertEquals(updatedPrice, book.getPrice());
+        Assertions.assertEquals(updatedDescription, book.getDescription());
+        Assertions.assertEquals(updatedCoverImage, book.getCoverImage());
     }
 
     @Test
-    void save_WhenBookIsValid_ShouldPersistBook() {
-        when(bookRepository.save(any(Book.class))).thenReturn(book);
-
-        Book result = bookRepository.save(book);
-
-        assertNotNull(result);
-        assertEquals("Test Book", result.getTitle());
+    void testExistsByIsbn() {
+        String isbn = "123456789";
+        Assertions.assertTrue(bookRepository.existsByIsbn(isbn));
     }
 
     @Test
-    void updateBookById_WhenBookExists_ShouldUpdateBook() {
-        doNothing().when(bookRepository).updateBookById(anyLong(), anyString(), anyString(), anyString(),
-                any(), anyString(), anyString());
-
-        bookRepository.updateBookById(1L, "Updated Title", "Updated Author", "0987654321",
-                BigDecimal.valueOf(29.99), "Updated Description", "updated.jpg");
-
-        verify(bookRepository, times(1)).updateBookById(1L, "Updated Title",
-                "Updated Author", "0987654321", BigDecimal.valueOf(29.99),
-                "Updated Description", "updated.jpg");
-    }
-
-    @Test
-    void existsByIsbn_WhenIsbnExists_ShouldReturnTrue() {
-        when(bookRepository.existsByIsbn("1234567890")).thenReturn(true);
-
-        boolean exists = bookRepository.existsByIsbn("1234567890");
-
-        assertTrue(exists);
-    }
-
-    @Test
-    void findByCategoriesId_WhenCategoryExists_ShouldReturnBooks() {
-        Pageable pageable = Pageable.unpaged();
-        when(bookRepository.findByCategoriesId(1L,
-                pageable)).thenReturn(new PageImpl<>(Collections.singletonList(book)));
-
-        Page<Book> result = bookRepository.findByCategoriesId(1L, pageable);
-
-        assertFalse(result.isEmpty());
-        assertEquals(1, result.getTotalElements());
-        assertEquals("Test Book", result.getContent().getFirst().getTitle());
+    void testFindByCategoriesId() {
+        Long categoryId = 1L;
+        Assertions.assertNotNull(bookRepository.findByCategoriesId(categoryId, Pageable.unpaged()));
     }
 }
