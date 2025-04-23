@@ -1,29 +1,35 @@
 package org.example.config;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.testcontainers.containers.MySQLContainer;
 
+@Component
 public class CustomMySqlContainer extends MySQLContainer<CustomMySqlContainer> {
-    private static final String DB_IMAGE = "mysql:8.0";
 
-    private static CustomMySqlContainer mySqlContainer;
+    private static final String DEFAULT_DB_IMAGE = "mysql:8.0";
+
+    @Value("${MYSQL_IMAGE:mysql:8.0}")
+    private String dbImage;
 
     private CustomMySqlContainer() {
-        super(DB_IMAGE);
+        super(DEFAULT_DB_IMAGE);
     }
 
-    public static synchronized CustomMySqlContainer getInstance() {
-        if (mySqlContainer == null) {
-            mySqlContainer = new CustomMySqlContainer();
-        }
-        return mySqlContainer;
+    private static class Holder {
+        private static final CustomMySqlContainer INSTANCE = new CustomMySqlContainer();
+    }
+
+    public static CustomMySqlContainer getInstance() {
+        return Holder.INSTANCE;
     }
 
     @Override
     public void start() {
         super.start();
-        System.setProperty("TEST_DB_URL", mySqlContainer.getJdbcUrl());
-        System.setProperty("TEST_DB_USERNAME", mySqlContainer.getUsername());
-        System.setProperty("TEST_DB_PASSWORD", mySqlContainer.getPassword());
+        System.setProperty("spring.datasource.url", getJdbcUrl());
+        System.setProperty("spring.datasource.username", getUsername());
+        System.setProperty("spring.datasource.password", getPassword());
     }
 
     @Override
