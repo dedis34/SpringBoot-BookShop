@@ -1,6 +1,5 @@
 package org.example.service.impl;
 
-
 import lombok.RequiredArgsConstructor;
 import org.example.dto.cartItem.AddItemToCartRequestDto;
 import org.example.dto.cartItem.UpdateCartItemRequestDto;
@@ -22,6 +21,7 @@ import org.example.service.ShoppingCartService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 
 @Service
 @RequiredArgsConstructor
@@ -35,12 +35,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Transactional
     public ShoppingCartResponseDto addToCart(Long userId, AddItemToCartRequestDto request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BookNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         ShoppingCart shoppingCart = shoppingCartRepository.findByUser(user)
                 .orElseGet(() -> {
                     ShoppingCart newCart = new ShoppingCart();
                     newCart.setUser(user);
+                    newCart.setCartItems(new HashSet<>());
                     return shoppingCartRepository.save(newCart);
                 });
 
@@ -80,8 +81,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Transactional
-    public ShoppingCartResponseDto updateCartItem(Long cartItemId,
-                                                  UpdateCartItemRequestDto request) {
+    public ShoppingCartResponseDto updateCartItem(Long cartItemId, UpdateCartItemRequestDto request) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new CartItemNotFoundException("Cart item not found"));
 

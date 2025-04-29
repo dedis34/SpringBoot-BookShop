@@ -2,15 +2,23 @@ package org.example.repository;
 
 import org.example.config.CustomMySqlContainer;
 import org.example.model.Book;
+import org.example.model.Category;
 import org.example.repository.book.BookRepository;
+import org.example.repository.category.CategoryRepository;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
@@ -19,19 +27,35 @@ import java.util.Optional;
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @Transactional
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BookRepositoryTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(BookRepositoryTest.class);
 
     @Autowired
     private BookRepository bookRepository;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private EntityManager entityManager;
 
     private Long bookId;
+    private CustomMySqlContainer mySqlContainer;
+
+    @BeforeAll
+    void setUpContainer() {
+        mySqlContainer = CustomMySqlContainer.getInstance();
+        mySqlContainer.start();
+    }
 
     @BeforeEach
     void setUp() {
-        CustomMySqlContainer.getInstance().start();
+        Category category = new Category();
+        category.setName("Sample Category");
+        category.setDeleted(false);
+        category = categoryRepository.save(category);
 
         Book book = new Book();
         book.setTitle("Sample Title");
@@ -41,7 +65,7 @@ public class BookRepositoryTest {
         book.setDescription("Sample Description");
         book.setCoverImage("sampleImage.png");
         book.setDeleted(false);
-        System.out.println("SetUp -> isDeleted: " + book.isDeleted());
+        book.getCategories().add(category);
 
         book = bookRepository.save(book);
         bookId = book.getId();
@@ -51,32 +75,15 @@ public class BookRepositoryTest {
     void testUpdateBookById() {
         Optional<Book> originalBook = bookRepository.findById(bookId);
         Assertions.assertTrue(originalBook.isPresent());
-        System.out.println("Before update -> isDeleted: " + originalBook.get().isDeleted());
-
-        String updatedTitle = "Updated Title";
-        String updatedAuthor = "Updated Author";
-        String updatedIsbn = "987654321";
-        BigDecimal updatedPrice = BigDecimal.valueOf(29.99);
-        String updatedDescription = "Updated Description";
-        String updatedCoverImage = "updatedImage.png";
-
-        System.out.println("Calling updateBookById with:");
-        System.out.println(" - id: " + bookId);
-        System.out.println(" - title: " + updatedTitle);
-        System.out.println(" - author: " + updatedAuthor);
-        System.out.println(" - isbn: " + updatedIsbn);
-        System.out.println(" - price: " + updatedPrice);
-        System.out.println(" - description: " + updatedDescription);
-        System.out.println(" - coverImage: " + updatedCoverImage);
 
         bookRepository.updateBookById(
                 bookId,
-                updatedTitle,
-                updatedAuthor,
-                updatedIsbn,
-                updatedPrice,
-                updatedDescription,
-                updatedCoverImage
+                "Updated Title",
+                "Updated Author",
+                "987654321",
+                BigDecimal.valueOf(29.99),
+                "Updated Description",
+                "updatedImage.png"
         );
 
         entityManager.flush();
@@ -87,25 +94,34 @@ public class BookRepositoryTest {
 
         Book book = updatedBook.get();
 
-        System.out.println("After update -> title: " + book.getTitle());
-
-        Assertions.assertEquals(updatedTitle, book.getTitle());
-        Assertions.assertEquals(updatedAuthor, book.getAuthor());
-        Assertions.assertEquals(updatedIsbn, book.getIsbn());
-        Assertions.assertEquals(updatedPrice, book.getPrice());
-        Assertions.assertEquals(updatedDescription, book.getDescription());
-        Assertions.assertEquals(updatedCoverImage, book.getCoverImage());
+        Assertions.assertEquals("Updated Title", book.getTitle());
+        Assertions.assertEquals("Updated Author", book.getAuthor());
+        Assertions.assertEquals("987654321", book.getIsbn());
+        Assertions.assertEquals(BigDecimal.valueOf(29.99), book.getPrice());
+        Assertions.assertEquals("Updated Description", book.getDescription());
+        Assertions.assertEquals("updatedImage.png", book.getCoverImage());
     }
 
     @Test
     void testExistsByIsbn() {
-        String isbn = "123456789";
-        Assertions.assertTrue(bookRepository.existsByIsbn(isbn));
+        Assertions.assertTrue(bookRepository.existsByIsbn("123456789"));
     }
 
     @Test
     void testFindByCategoriesId() {
-        Long categoryId = 1L;
-        Assertions.assertNotNull(bookRepository.findByCategoriesId(categoryId, Pageable.unpaged()));
+        Long categoryId = categoryRepository.findAll().stream()
+                .map(Category::getId)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("No category found for testing"));
+
+        Page<Book> result = bookRepository.findByCategoriesId(categoryId, Pageable.unpaged());
+
+        Assertions.assertNotNull(result);
+        Assertions.assertFalse(result.isEmpty());
+    }
+
+    @AfterAll
+    void tearDownContainer() {
+        mySqlContainer.stop();
     }
 }
