@@ -18,10 +18,34 @@ databaseChangeLog:
                   value: admin@example.com
               - column:
                   name: password
-                  value: $2a$10$XyZ3wQ9E1PJKL6VjFdfSseCEq9rOvhA/UNmV94QHqkG2l6bBZyV6G
+                  value: $2a$10$EQVI2UweY22CoQXOd4I3EOF41lk55sboVMYQ7sgroVveCyR6wviZC
               - column:
                   name: first_name
-                  value: Alice
+                  value: Admin
               - column:
                   name: last_name
-                  value: Stone
+                  value: admin
+              - column:
+                  name: shipping_address
+                  value: 123 Elm Street
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: "2"
+              - column:
+                  name: email
+                  value: user@example.com
+              - column:
+                  name: password
+                  value: $2a$10$DZKy0ba28TVjZDrvY9hcpu9jIq2DlXrduGWpvPHg6Tt1.9UWYgiSC
+              - column:
+                  name: first_name
+                  value: User
+              - column:
+                  name: last_name
+                  value: user
+              - column:
+                  name: shipping_address
+                  value: 456 Oxford Road
