@@ -1,8 +1,10 @@
 package org.example.service;
 
 import org.example.dto.cartItem.AddItemToCartRequestDto;
+import org.example.dto.cartItem.CartItemResponseDto;
 import org.example.dto.cartItem.UpdateCartItemRequestDto;
 import org.example.dto.shoppingCart.ShoppingCartResponseDto;
+import org.example.exception.BookNotFoundException;
 import org.example.exception.CartItemNotFoundException;
 import org.example.exception.UserNotFoundException;
 import org.example.mapper.ShoppingCartMapper;
@@ -22,6 +24,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -74,12 +77,26 @@ class ShoppingCartServiceTest {
         cartItem.setQuantity(2);
         cartItem.setShoppingCart(shoppingCart);
 
-        shoppingCartResponseDto = new ShoppingCartResponseDto(1L, 1L, new HashSet<>());
+        CartItemResponseDto itemDto = CartItemResponseDto.builder()
+                .id(1L)
+                .bookId(1L)
+                .bookTitle("Test Book")
+                .quantity(2)
+                .build();
+
+        Set<CartItemResponseDto> cartItems = Set.of(itemDto);
+
+        shoppingCartResponseDto = ShoppingCartResponseDto.builder()
+                .id(1L)
+                .userId(1L)
+                .cartItems(cartItems)
+                .build();
     }
 
     @Test
     void addToCart_WhenUserExistsAndBookExists_ShouldAddItemToCart() {
         AddItemToCartRequestDto request = new AddItemToCartRequestDto(1L, 2);
+
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(shoppingCartRepository.findByUser(user)).thenReturn(Optional.of(shoppingCart));
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
@@ -88,6 +105,16 @@ class ShoppingCartServiceTest {
         ShoppingCartResponseDto result = shoppingCartService.addToCart(1L, request);
 
         assertNotNull(result);
+        assertEquals(1L, result.userId());
+        assertEquals(shoppingCart.getId(), result.id());
+        assertNotNull(result.cartItems());
+        assertEquals(1, result.cartItems().size());
+
+        CartItemResponseDto cartItemResponseDto = result.cartItems().iterator().next();
+        assertEquals(1L, cartItemResponseDto.bookId());
+        assertEquals("Test Book", cartItemResponseDto.bookTitle());
+        assertEquals(2, cartItemResponseDto.quantity());
+
         verify(cartItemRepository).save(any(CartItem.class));
     }
 
@@ -155,4 +182,16 @@ class ShoppingCartServiceTest {
 
         assertThrows(CartItemNotFoundException.class, () -> shoppingCartService.removeCartItem(1L));
     }
+
+    @Test
+    void addToCart_WhenBookNotFound_ShouldThrowException() {
+        AddItemToCartRequestDto request = new AddItemToCartRequestDto(1L, 2);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(shoppingCartRepository.findByUser(user)).thenReturn(Optional.of(shoppingCart));
+        when(bookRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(BookNotFoundException.class, () -> shoppingCartService.addToCart(1L, request));
+    }
+
 }
