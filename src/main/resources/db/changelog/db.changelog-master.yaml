@@ -1,13 +1,17 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/changes/001-insert-users.yaml
+      file: db/changelog/changes/001-create-users-table.yaml
   - include:
-      file: db/changelog/changes/002-insert-roles.yaml
+      file: db/changelog/changes/002-create-roles-table.yaml
   - include:
       file: db/changelog/changes/003-create-users-roles-table.yaml
   - include:
-      file: db/changelog/changes/004-assign-roles.yaml
+      file: db/changelog/changes/004-create-categories-table.yaml
   - include:
-      file: db/changelog/changes/005-create-categories-table.yaml
+      file: db/changelog/changes/005-insert-categories.yaml
   - include:
-      file: db/changelog/changes/006-insert-categories.yaml
+      file: db/changelog/changes/006-insert-users.yaml
+  - include:
+      file: db/changelog/changes/007-insert-roles.yaml
+  - include:
+      file: db/changelog/changes/008-assign-roles.yaml
