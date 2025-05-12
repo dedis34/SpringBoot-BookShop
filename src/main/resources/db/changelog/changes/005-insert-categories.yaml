@@ -1,17 +1,20 @@
 databaseChangeLog:
   - changeSet:
-      id: 006-insert-categories
+      id: 005-insert-categories
       author: artur
       changes:
         - insert:
             tableName: categories
             columns:
               - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
                   name: name
-                  value: "Fiction"
+                  value: "Programming"
               - column:
                   name: description
-                  value: "Fiction books"
+                  value: "Books about programming"
               - column:
                   name: is_deleted
                   valueBoolean: false
