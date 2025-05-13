@@ -15,3 +15,15 @@ databaseChangeLog:
       file: db/changelog/changes/007-insert-roles.yaml
   - include:
       file: db/changelog/changes/008-assign-roles.yaml
+  - include:
+      file: db/changelog/changes/009-create-books-table.yaml
+  - include:
+      file: db/changelog/changes/010-create-book-category-table.yaml
+  - include:
+      file: db/changelog/changes/011-create-shopping-carts-table.yaml
+  - include:
+      file: db/changelog/changes/012-create-cart-items-table.yaml
+  - include:
+      file: db/changelog/changes/013-create-orders-table.yaml
+  - include:
+      file: db/changelog/changes/014-create-order-items-table.yaml
