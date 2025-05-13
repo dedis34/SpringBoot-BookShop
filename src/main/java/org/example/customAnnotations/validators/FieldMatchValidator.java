@@ -2,10 +2,11 @@ package org.example.customAnnotations.validators;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.example.dto.user.UserRegistrationRequestDto;
 import org.example.customAnnotations.FieldMatch;
+import org.springframework.beans.BeanWrapperImpl;
 
-public class FieldMatchValidator implements ConstraintValidator<FieldMatch, UserRegistrationRequestDto> {
+public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
+
     private String field;
     private String fieldMatch;
 
@@ -16,22 +17,14 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, User
     }
 
     @Override
-    public boolean isValid(UserRegistrationRequestDto dto, ConstraintValidatorContext context) {
-        if (dto == null) {
-            return true;
+    public boolean isValid(Object value, ConstraintValidatorContext context) {
+        Object fieldValue = new BeanWrapperImpl(value).getPropertyValue(field);
+        Object fieldMatchValue = new BeanWrapperImpl(value).getPropertyValue(fieldMatch);
+
+        if (fieldValue == null || fieldMatchValue == null) {
+            return false;
         }
 
-        String fieldValue = getFieldValue(dto, field);
-        String fieldMatchValue = getFieldValue(dto, fieldMatch);
-
-        return fieldValue != null && fieldValue.equals(fieldMatchValue);
-    }
-
-    private String getFieldValue(UserRegistrationRequestDto dto, String fieldName) {
-        try {
-            return (String) dto.getClass().getDeclaredField(fieldName).get(dto);
-        } catch (Exception e) {
-            return null;
-        }
+        return fieldValue.equals(fieldMatchValue);
     }
 }
