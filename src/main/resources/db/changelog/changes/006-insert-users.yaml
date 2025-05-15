@@ -18,6 +18,9 @@ databaseChangeLog:
               - column:
                   name: password
                   value: "$2a$10$EQVI2UweY22CoQXOd4I3EOF41lk55sboVMYQ7sgroVveCyR6wviZC"
+              - column:
+                  name: shipping_address
+                  value: "random Adress Admin"
         - insert:
             tableName: users
             columns:
@@ -33,3 +36,6 @@ databaseChangeLog:
               - column:
                   name: password
                   value: "$2a$10$DZKy0ba28TVjZDrvY9hcpu9jIq2DlXrduGWpvPHg6Tt1.9UWYgiSC"
+              - column:
+                  name: shipping_address
+                  value: "random Adress User"
