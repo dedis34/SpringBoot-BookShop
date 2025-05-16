@@ -21,10 +21,12 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 class ShoppingCartControllerTest {
 
     private MockMvc mockMvc;
+    private ObjectMapper objectMapper;
 
     @Mock
     private ShoppingCartServiceImpl shoppingCartServiceImpl;
@@ -38,6 +40,7 @@ class ShoppingCartControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        objectMapper = new ObjectMapper();
 
         mockUser = new User();
         mockUser.setId(1L);
@@ -58,7 +61,7 @@ class ShoppingCartControllerTest {
 
         mockMvc.perform(put("/api/cart/cart-items/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"quantity\":3}"))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L));
 

@@ -2,6 +2,7 @@ package org.example.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.cartItem.AddItemToCartRequestDto;
 import org.example.dto.cartItem.UpdateCartItemRequestDto;
@@ -53,7 +54,7 @@ public class ShoppingCartController {
     @PutMapping("/cart-items/{cartItemId}")
     @PreAuthorize("hasRole('ROLE_USER')")
     public ShoppingCartResponseDto updateCartItem(@PathVariable Long cartItemId,
-                                                  @RequestBody UpdateCartItemRequestDto request) {
+                                                  @Valid @RequestBody UpdateCartItemRequestDto request) {
         return shoppingCartServiceImpl.updateCartItem(cartItemId, request);
     }
 
